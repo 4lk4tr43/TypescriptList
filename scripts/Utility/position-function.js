@@ -87,7 +87,7 @@ var Utility;
                     eventArgs.y = 1;
                     y = this.yMin + (y % distance);
                 }
-                if (this.wrappingEvent !== undefined && (eventArgs.x !== 0 || eventArgs.y !== 0))
+                if ((eventArgs.x !== 0 || eventArgs.y !== 0) && this.wrappingEvent !== undefined)
                     this.wrappingEvent(eventArgs);
                 return y;
             }
