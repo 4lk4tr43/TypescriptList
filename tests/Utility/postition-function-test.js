@@ -1,7 +1,7 @@
-TestCase('PositionFunction', {
+TestCase('StandardFunction', {
     testQuadratic: function () {
-        var quadraticFunction = Utility.PositionFunction.createQuadraticFunction(1,0,0);
-        var quadraticPosition = new Utility.PositionFunction(quadraticFunction);
+        var quadraticFunction = Utility.StandardFunction.quadratic(1,0,0);
+        var quadraticPosition = new Utility.StandardFunction(quadraticFunction);
 
         assertEquals(0, quadraticPosition.getY(0));
         assertEquals(1, quadraticPosition.getY(1));
@@ -16,12 +16,12 @@ TestCase('PositionFunction', {
         assertEquals(0, quadraticPosition.getY(-2));
     },
     testCapping: function () {
-        var quadraticFunction = Utility.PositionFunction.createQuadraticFunction(1,0,0);
+        var quadraticFunction = Utility.StandardFunction.quadratic(1,0,0);
 
         var wrapped = false;
         var wrapHandler = function (e) { wrapped = true; };
 
-        var quadraticPosition = new Utility.PositionFunction(quadraticFunction, 0, 0, -2, 2, undefined, undefined,
+        var quadraticPosition = new Utility.StandardFunction(quadraticFunction, 0, 0, -2, 2, undefined, undefined,
             wrapHandler);
 
         assertEqualsDelta(1, quadraticPosition.getY(1), 0.001);

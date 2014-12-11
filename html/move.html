@@ -26,7 +26,7 @@
     <script type="text/javascript">
         var element = document.querySelector('#move');
 
-        var positionY = new Utility.PositionFunction(Utility.PositionFunction.createQuadraticFunction((window.innerHeight)/ ((window.outerWidth)*(window.innerWidth))),
+        var positionY = new Utility.StandardFunction(Utility.StandardFunction.quadratic((window.innerHeight)/ ((window.outerWidth)*(window.innerWidth))),
         0, 100, undefined, undefined, 0, 500);
 
         var delta = 1;

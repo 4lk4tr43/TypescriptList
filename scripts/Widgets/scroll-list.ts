@@ -1,4 +1,4 @@
-///<reference path="../Utility/position-function.ts"/>
+///<reference path="../Utility/standard-function.ts"/>
 ///<reference path="../Utility/easing-function.ts"/>
 
 module Widgets {
@@ -10,7 +10,7 @@ module Widgets {
         constructor(public element:HTMLElement,
                     public visibleCount:number,
                     position:number=0,
-                    public positionFunction:(x:number)=>number=Utility.PositionFunction.createQuadraticFunction(.001)) {
+                    public yPositionFunction:(x:number)=>number=Utility.StandardFunction.quadratic(.001)) {
             this._position = position;
         }
 
@@ -23,7 +23,7 @@ module Widgets {
             for (var i = 0; i < listLength; i++) {
                 var element = this.element.children[i];
                 var left = (i+1+position) * xStride;
-                var top = this.positionFunction(left);
+                var top = this.yPositionFunction(left);
                 var right = left + element['offsetWidth'];
                 var bottom = top + element['offsetHeight'];
 
