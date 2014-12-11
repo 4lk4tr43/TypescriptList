@@ -14,7 +14,9 @@ module Widgets {
             this._position = position;
         }
 
-        setPosition(position:number, elementReachedBorder:(element:Element)=>void=undefined) {
+        setPosition(position:number,
+                    elementReachedBorder:(element:Element)=>void=undefined,
+                    elementExited:(element:Element)=>void=undefined) {
             var listLength = this.element.children.length;
             var listWidth = this.element.offsetWidth;
             var listHeight = this.element.offsetHeight;
@@ -30,8 +32,10 @@ module Widgets {
                 element['style'].left = left + 'px';
                 element['style'].top =  top + 'px';
 
-                if (0 >= left || listWidth <= right || 0 > top || (listHeight <= bottom && listHeight != 0)){
+                if (0 >= left || listWidth <= right || 0 >= top || (listHeight <= bottom && listHeight != 0)){
                     if (elementReachedBorder !== undefined) elementReachedBorder(element);
+                    if (0 > right || listWidth < left || 0 > bottom || (listHeight < top && listHeight != 0))
+                        if (elementExited !== undefined) elementExited(element);
                 }
                 else element['style'].display = 'block';
             }
