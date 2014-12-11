@@ -1,5 +1,6 @@
 load:
 - ../scripts/Utility/*.js
+- ../scripts/Widgets/*.js
 
 serve:
     
@@ -7,5 +8,6 @@ exclude:
   
 test:
 - Utility/*.js
+- Widgets/*.js
  
     
