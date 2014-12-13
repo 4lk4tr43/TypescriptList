@@ -1,5 +1,4 @@
 ///<reference path="../Utility/standard-function.ts"/>
-///<reference path="../Utility/easing-function.ts"/>
 
 module Widgets {
 
@@ -10,13 +9,14 @@ module Widgets {
         constructor(public element:HTMLElement,
                     public visibleCount:number,
                     position:number=0,
-                    public yPositionFunction:(x:number)=>number=Utility.StandardFunction.quadratic(.001)) {
+                    public yPositionFunction:(x:number)=>number=Utility.StandardFunction.quadratic(.001),
+                    public movementEasing:(x:number)=>number=Utility.StandardFunction.inOut(2, 1),
+                    public elementReachedBorder:(element:Element)=>void=undefined,
+                    public elementExited:(element:Element)=>void=undefined) {
             this._position = position;
         }
 
-        setPosition(position:number,
-                    elementReachedBorder:(element:Element)=>void=undefined,
-                    elementExited:(element:Element)=>void=undefined) {
+        setPosition(position:number) {
             var listLength = this.element.children.length;
             var listWidth = this.element.offsetWidth;
             var listHeight = this.element.offsetHeight;
@@ -33,9 +33,9 @@ module Widgets {
                 element['style'].top =  top + 'px';
 
                 if (0 >= left || listWidth <= right || 0 >= top || (listHeight <= bottom && listHeight != 0)){
-                    if (elementReachedBorder !== undefined) elementReachedBorder(element);
+                    if (this.elementReachedBorder !== undefined) this.elementReachedBorder(element);
                     if (0 > right || listWidth < left || 0 > bottom || (listHeight < top && listHeight != 0))
-                        if (elementExited !== undefined) elementExited(element);
+                        if (this.elementExited !== undefined) this.elementExited(element);
                 }
                 else element['style'].display = 'block';
             }
@@ -45,8 +45,6 @@ module Widgets {
 
         private _isMoving:boolean = false;
         moveToPosition(position:number, time:number,
-                       elementReachedBorder:(element:Element)=>void=undefined,
-                       easing:(t:number)=>number=Utility.EasingFunction.easeInOutQuad,
                        callback:()=>void=undefined) {
             if (this._isMoving) return;
             this._isMoving = true;
@@ -61,12 +59,12 @@ module Widgets {
                 elapsed = new Date().getTime() - startTime;
                 if (elapsed < time) {
                     window.setTimeout(function () {
-                        self.setPosition(startPosition + deltaPosition * easing(elapsed / time), elementReachedBorder);
+                        self.setPosition(startPosition + deltaPosition * self.movementEasing(elapsed / time));
                         animate();
                     });
                 }
                 else {
-                    self.setPosition(position, elementReachedBorder);
+                    self.setPosition(position);
                     self._isMoving = false;
                     if (callback !== undefined) callback();
                 }

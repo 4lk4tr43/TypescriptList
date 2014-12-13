@@ -1,13 +1,25 @@
 var Utility;
 (function (Utility) {
     /**
-     * Converts X positions the corresponding Y positions using a provided function
+     * Generates standard functions
      */
     var StandardFunction = (function () {
         function StandardFunction() {
         }
         /**
-         * Standard Quadratic function
+         * Linear function
+         *
+         * @param a , scale
+         * @param c , constant
+         * @returns {function(number): number}
+         */
+        StandardFunction.linear = function (a, c) {
+            return function (x) {
+                return a * x + c;
+            };
+        };
+        /**
+         * Quadratic function
          *
          * @param a , quadratic portion
          * @param b , linear portion
@@ -20,6 +32,25 @@ var Utility;
             if (c === void 0) { c = 0; }
             return function (x) {
                 return a * x * x + b * x + c;
+            };
+        };
+        /**
+         * Creates an easing function
+         *
+         * @param exponent , dimension
+         * @param range , start at 0 end at range
+         * @returns {function(number): number}
+         */
+        StandardFunction.inOut = function (exponent, range) {
+            return function (x) {
+                var a = x;
+                var r = range - x;
+                var b = r;
+                for (var i = 1; i < exponent; i++) {
+                    a *= x;
+                    b *= r;
+                }
+                return a / (a + b);
             };
         };
         return StandardFunction;

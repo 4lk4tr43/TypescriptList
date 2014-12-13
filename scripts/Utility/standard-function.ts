@@ -1,12 +1,25 @@
 module Utility {
 
     /**
-     * Converts X positions the corresponding Y positions using a provided function
+     * Generates standard functions
      */
     export class StandardFunction {
 
         /**
-         * Standard Quadratic function
+         * Linear function
+         *
+         * @param a , scale
+         * @param c , constant
+         * @returns {function(number): number}
+         */
+        static linear(a:number, c:number) {
+            return function (x:number) {
+                return a * x + c;
+            }
+        }
+
+        /**
+         * Quadratic function
          *
          * @param a , quadratic portion
          * @param b , linear portion
@@ -16,6 +29,28 @@ module Utility {
         static quadratic(a:number = 1, b:number = 0, c:number = 0) {
             return function (x:number) {
                 return a * x * x + b * x + c;
+            }
+        }
+
+        /**
+         * Creates an easing function
+         *
+         * @param exponent , dimension
+         * @param range , start at 0 end at range
+         * @returns {function(number): number}
+         */
+        static inOut(exponent:number, range:number) {
+            return function (x:number) {
+                var a = x;
+                var r = range - x;
+                var b = r;
+
+                for (var i = 1; i < exponent; i++){
+                    a *= x;
+                    b *= r;
+                }
+
+                return a / (a + b);
             }
         }
     }
