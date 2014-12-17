@@ -5,7 +5,7 @@
     <title></title>
     <style type="text/css">
         ul {
-            text-decoration: dashed;
+            list-style: none;
         }
     </style>
 </head>
@@ -19,24 +19,21 @@
 <script type="text/javascript">
     var listElement = document.querySelector('#list');
     var list = new Widgets.ScrollList(listElement);
-    var listWidth = list.element.offsetWidth;
 
     list.xPositionFunction = function (index) {
-        return Utility.StandardFunction.quadratic(.001)(index * 200)* ((index < 0) ? -1 : 1);
+        return 100 + Utility.StandardFunction.quadratic(.001)(index * 200)* ((index < 0) ? -1 : 1);
     };
+
     list.yPositionFunction = function (index, left) {
-        return Utility.StandardFunction.quadratic(.001)(left*index/4);
+        return Utility.StandardFunction.quadratic(.0005, 0, 100)(left*index);
+    };
+    list.elementUpdate = function (element, index) {
+        if (parseInt(element.style.left)>150)
+            element.style.backgroundColor = 'lightblue';
+        else if (index < 0) element.style.backgroundColor = 'lime';
+        else element.style.backgroundColor = 'pink';
     };
 
-    /*
-    list.xPositionFunction = quadX;
-
-    list.elementReachedBorder = function(e){e['style'].backgroundColor = 'red';};
-    list.elementExited = function(e){e['style'].display = 'none';};
-    list.elementVisible = function(e) { console.log(e.innerHTML);};
-    list.elementUpdate = function (x, y) {return {x:1+x/list.element.offsetWidth};
-    };
-    */
     function createElement(id) {
         var element = document.createElement('li');
         element.id = id;
@@ -46,15 +43,16 @@
     }
 
     for (var i = 0; i < 5; i++) {
-        list.addElement(createElement(i));
+        listElement.appendChild(createElement(i));
     }
+    list.setPositions();
 
     var position = 0;
     var fixedPosition = 0;
 
     function onKeyDown(e) {
         if (e.keyCode == 65 || e.keyCode == 68) {
-            if (e.keyCode == 65) position -= .1;
+            if (e.keyCode == 65) position -= .05;
             else position += .1;
             list.setPositions(position);
         }

@@ -11,27 +11,26 @@ module Widgets {
         position:number=0,
         public xPositionFunction:(index:number)=>number=function(){return 100;},
         public yPositionFunction:(index:number, left:number)=>number=function(i){return 50*i;},
-        public elementUpdate:(element:HTMLElement, index:number, x:number, y:number)=>{x:number;y:number}=undefined,
+        public elementUpdate:(element:HTMLElement, index:number)=>void=undefined,
         public easing:(t:number)=>number=Utility.StandardFunction.inOut(2, 1)) {
             this._position = position;
         }
 
-        setPositions(position:number) {
+        setPositions(position:number=undefined) {
             var listLength = this.element.children.length;
+            var p = position === undefined ? this._position : position;
 
             for (var i = 0; i < listLength; i++) {
                 var element = <HTMLElement>this.element.children[i];
-                var relIndex = i+position;
+                var relIndex = i + p;
                 var left = this.xPositionFunction(relIndex);
                 var top = this.yPositionFunction(relIndex, left);
-
-                element.style.display = 'block';
                 element.style.left = left + 'px';
                 element.style.top =  top + 'px';
-                if(this.elementUpdate !== undefined) this.elementUpdate(element, relIndex, left, top);
+                if(this.elementUpdate !== undefined) this.elementUpdate(element, relIndex);
             }
 
-            this._position = position;
+            this._position = p;
         }
 
         moveToPosition(position:number, time:number, callback:()=>void=undefined) {
@@ -60,11 +59,6 @@ module Widgets {
                 };
 
             self._animate();
-        }
-
-        addElement(element:HTMLElement) {
-            this.element.appendChild(element);
-            this.setPositions(this._position);
         }
     }
 }

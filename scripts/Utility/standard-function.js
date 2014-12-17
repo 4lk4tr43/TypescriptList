@@ -40,7 +40,7 @@ var Utility;
          * Creates an easing function
          *
          * @param exponent , dimension
-         * @param range , start at 0 end at range
+         * @param range , start at 0, ends at range
          * @returns {function(number): number}
          */
         StandardFunction.inOut = function (exponent, range) {
