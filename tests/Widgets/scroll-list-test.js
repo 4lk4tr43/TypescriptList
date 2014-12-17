@@ -27,7 +27,7 @@ TestCase('ScrollList', {
         var e1 = list.element.children[1];
         var e4 = list.element.children[4];
 
-        list.setPosition(0);
+        list.setPositions(0);
         var firstXPosition = parseInt(e0.style.left);
         var firstYPosition = parseInt(e0.style.top);
         var secondXPosition = parseInt(e1.style.left);
@@ -37,7 +37,7 @@ TestCase('ScrollList', {
 
         assertTrue(parseInt(e0.style.left) < parseInt(e1.style.left));
 
-        list.setPosition(1);
+        list.setPositions(1);
 
         assertEqualsDelta(secondXPosition, parseInt(e0.style.left), 1);
    }
