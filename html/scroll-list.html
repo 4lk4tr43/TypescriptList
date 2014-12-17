@@ -27,6 +27,7 @@
     list.yPositionFunction = function (index, left) {
         return Utility.StandardFunction.quadratic(.0005, 0, 100)(left*index);
     };
+
     list.elementUpdate = function (element, index) {
         if (parseInt(element.style.left)>150)
             element.style.backgroundColor = 'lightblue';

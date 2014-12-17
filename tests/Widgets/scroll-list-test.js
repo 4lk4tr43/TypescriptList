@@ -7,6 +7,14 @@ TestCase('ScrollList', {
         var listElement = document.querySelector('#list');
         var list = new Widgets.ScrollList(listElement, 3);
 
+        list.xPositionFunction = function (index) {
+            return 100 + Utility.StandardFunction.quadratic(.001)(index * 200)* ((index < 0) ? -1 : 1);
+        };
+
+        list.yPositionFunction = function (index, left) {
+            return Utility.StandardFunction.quadratic(.0005, 0, 100)(left*index);
+        };
+
         function createElement(id) {
             var element = document.createElement('li');
             element.id = id;
@@ -20,20 +28,15 @@ TestCase('ScrollList', {
         }
 
         for (var i = 0; i < 5; i++) {
-            list.addElement(createElement(i));
+            listElement.appendChild(createElement(i));
         }
+        list.setPositions();
 
         var e0 = list.element.children[0];
         var e1 = list.element.children[1];
-        var e4 = list.element.children[4];
 
         list.setPositions(0);
-        var firstXPosition = parseInt(e0.style.left);
-        var firstYPosition = parseInt(e0.style.top);
         var secondXPosition = parseInt(e1.style.left);
-        var secondYPosition = parseInt(e1.style.top);
-
-
 
         assertTrue(parseInt(e0.style.left) < parseInt(e1.style.left));
 
