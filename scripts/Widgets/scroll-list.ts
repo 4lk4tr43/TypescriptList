@@ -9,8 +9,8 @@ module Widgets {
         constructor(public element:HTMLElement,
                     public visibleCount:number,
                     position:number=0,
-                    public xPositionFunction:(x:number)=>number=Utility.StandardFunction.linear(),
-                    public yPositionFunction:(x:number)=>number=Utility.StandardFunction.quadratic(.001),
+                    public xPositionFunction:(index:number)=>number=function(){return 100;},
+                    public yPositionFunction:(index:number, left:number)=>number=function(i){return 50*i;},
                     public scaleFunction:(x:number, y:number)=>{x:number;y:number}=undefined,
                     public movementEasing:(x:number)=>number=Utility.StandardFunction.inOut(2, 1),
                     public elementReachedBorder:(element:HTMLElement)=>void=undefined,
@@ -23,19 +23,18 @@ module Widgets {
             var listLength = this.element.children.length;
             var listWidth = this.element.offsetWidth;
             var listHeight = this.element.offsetHeight;
-            var xStride = listWidth / (this.visibleCount+1);
 
             for (var i = 0; i < listLength; i++) {
                 var element = <HTMLElement>this.element.children[i];
-                var left = this.xPositionFunction((i+1+position) * xStride);
-                var top = this.yPositionFunction(left);
+                var relIndex = i+position;
+                var left = this.xPositionFunction(relIndex);
+                var top = this.yPositionFunction(relIndex, left);
 
                 element.style.display = 'block';
                 element.style.left = left + 'px';
                 element.style.top =  top + 'px';
                 if(this.scaleFunction !== undefined) {
                     var scale = this.scaleFunction(left, top);
-
                     element.style.transform = 'scale(' + scale.x + ',' + (scale.y === undefined ? scale.x :scale.y) + ')';
                 }
 

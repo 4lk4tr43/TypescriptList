@@ -22,9 +22,14 @@
 
     var listWidth = list.element.offsetWidth;
     var listVisibleCount = list.visibleCount;
-    var quadX = function (x) {
-        return Utility.StandardFunction.quadratic(0.001)(x) * ((x < 0) ? -1 : 1);
+    list.xPositionFunction = function (index) {
+        return Utility.StandardFunction.quadratic(.001)(index * 100)* ((index < 0) ? -1 : 1);
     };
+    list.yPositionFunction = function (index, left) {
+        return Utility.StandardFunction.quadratic(.001)(left*index);
+    };
+
+    /*
     list.xPositionFunction = quadX;
 
     list.elementReachedBorder = function(e){e['style'].backgroundColor = 'red';};
@@ -32,6 +37,7 @@
     list.elementVisible = function(e) { console.log(e.innerHTML);};
     list.scaleFunction = function (x, y) {return {x:1+x/list.element.offsetWidth};
     };
+    */
     function createElement(id) {
         var element = document.createElement('li');
         element.id = id;
