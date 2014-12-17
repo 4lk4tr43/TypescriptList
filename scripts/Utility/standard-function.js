@@ -14,6 +14,8 @@ var Utility;
          * @returns {function(number): number}
          */
         StandardFunction.linear = function (a, c) {
+            if (a === void 0) { a = 1; }
+            if (c === void 0) { c = 0; }
             return function (x) {
                 return a * x + c;
             };

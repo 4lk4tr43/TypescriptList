@@ -12,7 +12,7 @@ module Utility {
          * @param c , constant
          * @returns {function(number): number}
          */
-        static linear(a:number, c:number) {
+        static linear(a:number=1, c:number=0) {
             return function (x:number) {
                 return a * x + c;
             }

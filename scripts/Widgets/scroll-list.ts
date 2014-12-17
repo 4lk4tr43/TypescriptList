@@ -9,10 +9,13 @@ module Widgets {
         constructor(public element:HTMLElement,
                     public visibleCount:number,
                     position:number=0,
+                    public xPositionFunction:(x:number)=>number=Utility.StandardFunction.linear(),
                     public yPositionFunction:(x:number)=>number=Utility.StandardFunction.quadratic(.001),
+                    public scaleFunction:(x:number, y:number)=>{x:number;y:number}=undefined,
                     public movementEasing:(x:number)=>number=Utility.StandardFunction.inOut(2, 1),
-                    public elementReachedBorder:(element:Element)=>void=undefined,
-                    public elementExited:(element:Element)=>void=undefined) {
+                    public elementReachedBorder:(element:HTMLElement)=>void=undefined,
+                    public elementExited:(element:HTMLElement)=>void=undefined,
+                    public elementVisible:(element:HTMLElement)=>void=undefined) {
             this._position = position;
         }
 
@@ -23,21 +26,33 @@ module Widgets {
             var xStride = listWidth / (this.visibleCount+1);
 
             for (var i = 0; i < listLength; i++) {
-                var element = this.element.children[i];
-                var left = (i+1+position) * xStride;
+                var element = <HTMLElement>this.element.children[i];
+                var left = this.xPositionFunction((i+1+position) * xStride);
                 var top = this.yPositionFunction(left);
-                var right = left + element['offsetWidth'];
-                var bottom = top + element['offsetHeight'];
 
-                element['style'].left = left + 'px';
-                element['style'].top =  top + 'px';
+                element.style.display = 'block';
+                element.style.left = left + 'px';
+                element.style.top =  top + 'px';
+                if(this.scaleFunction !== undefined) {
+                    var scale = this.scaleFunction(left, top);
 
-                if (0 >= left || listWidth <= right || 0 >= top || (listHeight <= bottom && listHeight != 0)){
-                    if (this.elementReachedBorder !== undefined) this.elementReachedBorder(element);
-                    if (0 > right || listWidth < left || 0 > bottom || (listHeight < top && listHeight != 0))
-                        if (this.elementExited !== undefined) this.elementExited(element);
+                    element.style.transform = 'scale(' + scale.x + ',' + (scale.y === undefined ? scale.x :scale.y) + ')';
                 }
-                else element['style'].display = 'block';
+
+                var elementBounding = element.getBoundingClientRect();
+                element.style.display = 'none';
+
+                if (0 >= elementBounding.left || listWidth <= elementBounding.right || 0 >= elementBounding.top || (listHeight <= elementBounding.bottom && listHeight != 0)){
+                    if (this.elementReachedBorder !== undefined) this.elementReachedBorder(element);
+                    if (this.elementExited !== undefined)
+                        if (0 > elementBounding.right || listWidth < elementBounding.left || 0 > elementBounding.bottom || (listHeight < elementBounding.top && listHeight != 0))
+                            this.elementExited(element);
+                    else element.style.display = 'block';
+                }
+                else {
+                    if (this.elementVisible !== undefined) this.elementVisible(element);
+                    element.style.display = 'block';
+                }
             }
 
             this._position = position;
@@ -49,7 +64,7 @@ module Widgets {
             if (this._isMoving) return;
             this._isMoving = true;
 
-            var self = this;
+            var self = <ScrollList>this;
             var startPosition = self._position;
             var deltaPosition = position - self._position;
             var startTime = new Date().getTime();
