@@ -4,34 +4,6 @@ module Utility {
      * Generates standard functions
      */
     export class StandardFunction {
-
-        /**
-         * Linear function
-         *
-         * @param a , scale
-         * @param c , constant
-         * @returns {function(number): number}
-         */
-        static linear(a:number=1, c:number=0) {
-            return function (x:number) {
-                return a * x + c;
-            }
-        }
-
-        /**
-         * Quadratic function
-         *
-         * @param a , quadratic portion
-         * @param b , linear portion
-         * @param c , constant portion
-         * @returns {function(number): number}
-         */
-        static quadratic(a:number = 1, b:number = 0, c:number = 0) {
-            return function (x:number) {
-                return a * x * x + b * x + c;
-            }
-        }
-
         /**
          * Creates an easing function
          *

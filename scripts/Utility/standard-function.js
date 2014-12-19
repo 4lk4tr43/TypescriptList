@@ -7,36 +7,6 @@ var Utility;
         function StandardFunction() {
         }
         /**
-         * Linear function
-         *
-         * @param a , scale
-         * @param c , constant
-         * @returns {function(number): number}
-         */
-        StandardFunction.linear = function (a, c) {
-            if (a === void 0) { a = 1; }
-            if (c === void 0) { c = 0; }
-            return function (x) {
-                return a * x + c;
-            };
-        };
-        /**
-         * Quadratic function
-         *
-         * @param a , quadratic portion
-         * @param b , linear portion
-         * @param c , constant portion
-         * @returns {function(number): number}
-         */
-        StandardFunction.quadratic = function (a, b, c) {
-            if (a === void 0) { a = 1; }
-            if (b === void 0) { b = 0; }
-            if (c === void 0) { c = 0; }
-            return function (x) {
-                return a * x * x + b * x + c;
-            };
-        };
-        /**
          * Creates an easing function
          *
          * @param exponent , dimension

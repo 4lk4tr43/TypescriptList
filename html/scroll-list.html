@@ -21,11 +21,12 @@
     var list = new Widgets.ScrollList(listElement);
 
     list.xPositionFunction = function (index) {
-        return 100 + Utility.StandardFunction.quadratic(.001)(index * 200)* ((index < 0) ? -1 : 1);
+        return 200*index;
     };
 
     list.yPositionFunction = function (index, left) {
-        return Utility.StandardFunction.quadratic(.0005, 0, 100)(left*index);
+        console.log();
+        return Math.sin(left/100)* 100 + 200;
     };
 
     list.elementUpdate = function (element, index) {
